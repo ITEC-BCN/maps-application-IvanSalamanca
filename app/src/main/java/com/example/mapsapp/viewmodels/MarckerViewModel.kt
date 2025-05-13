@@ -1,14 +1,16 @@
 package com.example.mapsapp.viewmodels
 
+import android.graphics.Bitmap
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.mapsapp.MyApp
 import com.example.mapsapp.data.Marcker
 import com.example.mapsapp.data.Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 
 
 // Hacer boton edidted para guardar si hay cambios
@@ -16,6 +18,10 @@ class MarckerViewModel (latitude: Double,longitude : Double) : ViewModel(){
     val repository = Repository()
 
     val cordenadas = latitude.toString()+";"+longitude
+
+    // Muestra su hay algun cambio
+    val _isChanged = MutableLiveData<Boolean>(false)
+    val isChanged = _isChanged
 
     // Valores Marcador
     private val _titleMarker = MutableLiveData<String>()
@@ -40,9 +46,13 @@ class MarckerViewModel (latitude: Double,longitude : Double) : ViewModel(){
     }
 
     // Insterar nuvo marcador
-     fun saveMarcker(){
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun saveMarcker(img : Bitmap?){
+        val stream = ByteArrayOutputStream()
+        img?.compress(Bitmap.CompressFormat.PNG, 0, stream)
         CoroutineScope(Dispatchers.IO).launch {
-            var marcker = Marcker(id = 0,cordenadas,_titleMarker.value!!,descriptionMarcker.value!!,"URL Test")
+            val imgURL = repository.uploadImage(stream.toByteArray())
+            var marcker = Marcker(id = 0,cordenadas,_titleMarker.value!!,descriptionMarcker.value!!,imgURL)
             repository.insertMarcker(marcker)
         }
     }

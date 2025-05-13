@@ -3,8 +3,10 @@ package com.example.mapsapp.ui.screens
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,10 +35,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mapsapp.viewmodels.MarckerViewModel
 import com.example.mapsapp.viewmodels.MarckerViewModelFactory
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EditMarkerScreen(id: Int, navBack :() -> Unit){
     val context = LocalContext.current
-    val marckViewModel : MarckerViewModel = viewModel(factory = MarckerViewModelFactory(latitud,longitud))
+    val marckViewModel : MarckerViewModel = viewModel()
     val titile = marckViewModel.titleMarcker.observeAsState("")
     val description = marckViewModel.descriptionMarcker.observeAsState("")
     val imgUrl = marckViewModel.url.observeAsState("")
@@ -98,11 +101,18 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
         }
 
         Button(onClick = {
-            // TODO Actualixar marcador Supabase
-            marckViewModel.saveMarcker()
+
+            marckViewModel.saveMarcker(bitmap.value)
             navBack()
         }) {
             Text("Add")
+        }
+
+        Button(onClick = {
+
+            navBack()
+        }) {
+            Text("<--Back--")
         }
     }
 }

@@ -97,6 +97,7 @@ fun MarckerScreen (latitud: Double, longitud: Double, navigateBack: () -> Unit){
             }
             Spacer(modifier = Modifier.height(24.dp))
             bitmap.value?.let {
+
                 Image(bitmap = it.asImageBitmap(), contentDescription = null,
                     modifier = Modifier.size(300.dp).clip(RoundedCornerShape(12.dp)),contentScale = ContentScale.Crop)
             }
@@ -104,7 +105,7 @@ fun MarckerScreen (latitud: Double, longitud: Double, navigateBack: () -> Unit){
 
         Button(onClick = {
             // Guardar marcador Supabase
-            marckViewModel.saveMarcker()
+            marckViewModel.saveMarcker(bitmap.value)
             navigateBack()
         }) {
             Text("Add")

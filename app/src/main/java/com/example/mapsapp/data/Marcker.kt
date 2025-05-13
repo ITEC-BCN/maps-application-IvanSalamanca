@@ -8,5 +8,5 @@ data class Marcker(
     val cordenadas : String,
     val title : String,
     val descripcion : String,
-    val url : String
+    val url : String? = ""
 )
