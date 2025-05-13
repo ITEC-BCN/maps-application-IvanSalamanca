@@ -1,3 +1,13 @@
+import java.util.Properties
+
+val localPropsFile = rootProject.file("local.properties")
+val localProps = Properties().apply {
+    if (localPropsFile.exists()) {
+        load(localPropsFile.inputStream())
+    }
+}
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -11,6 +21,11 @@ android {
     namespace = "com.example.mapsapp"
     compileSdk = 35
 
+    buildFeatures {
+        buildConfig = true
+    }
+
+
     defaultConfig {
         applicationId = "com.example.mapsapp"
         minSdk = 24
@@ -19,6 +34,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField(
+            type = "String",
+            name = "SUPABASE_URL",
+            value = "\"${localProps.getProperty("supabaseUrl") ?: ""}\""
+        )
+        buildConfigField(
+            type = "String",
+            name = "SUPABASE_KEY",
+            value = "\"${localProps.getProperty("supabaseKey") ?: ""}\""
+        )
+
     }
 
     buildTypes {
@@ -59,6 +85,13 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+    implementation(platform("io.github.jan-tennert.supabase:bom:3.1.4"))
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.ktor:ktor-client-android:3.1.2")
+
 
 
     testImplementation(libs.junit)
