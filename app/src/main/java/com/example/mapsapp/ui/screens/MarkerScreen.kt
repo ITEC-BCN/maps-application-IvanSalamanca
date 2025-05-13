@@ -4,8 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,11 +22,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +38,7 @@ import com.example.mapsapp.viewmodels.MarckerViewModel
 import com.example.mapsapp.viewmodels.MarckerViewModelFactory
 import java.io.File
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MarckerScreen (latitud: Double, longitud: Double, navigateBack: () -> Unit){
     val context = LocalContext.current
@@ -54,17 +55,14 @@ fun MarckerScreen (latitud: Double, longitud: Double, navigateBack: () -> Unit){
                 bitmap.value = BitmapFactory.decodeStream(stream)
             }
         }
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(onClick = {
-            val uri = createImageUri(context)
-            imageUri.value = uri
-            launcher.launch(uri!!)
-        }) {
-            Text("Abrir Cámara")
+    val pickImageLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                imageUri.value = it
+                val stream = context.contentResolver.openInputStream(it)
+                bitmap.value = BitmapFactory.decodeStream(stream)
+            }
         }
-        Spacer(modifier = Modifier.height(24.dp))
-    }
     Column (
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -94,6 +92,11 @@ fun MarckerScreen (latitud: Double, longitud: Double, navigateBack: () -> Unit){
                 launcher.launch(uri!!)
             }) {
                 Text("Abrir Cámara")
+            }
+            Button(onClick = {
+                pickImageLauncher.launch("image/*")
+            }) {
+                Text("Foto Galeria")
             }
             Spacer(modifier = Modifier.height(24.dp))
             bitmap.value?.let {

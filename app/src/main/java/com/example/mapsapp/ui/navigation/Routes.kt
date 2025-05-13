@@ -17,6 +17,9 @@ sealed class Destination{
 
     @Serializable
     data class PantallaMarcador (val latitude : Double, val lognitude : Double) : Destination()
+
+    @Serializable
+    data class PantallaEditMarcador ( val id : Int) : Destination()
 }
 
 

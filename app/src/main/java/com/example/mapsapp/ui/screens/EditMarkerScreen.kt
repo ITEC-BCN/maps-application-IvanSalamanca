@@ -32,6 +32,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.mapsapp.viewmodels.EditMarckerViewModel
+import com.example.mapsapp.viewmodels.EditMarckerViewModelFactory
 import com.example.mapsapp.viewmodels.MarckerViewModel
 import com.example.mapsapp.viewmodels.MarckerViewModelFactory
 
@@ -39,12 +41,13 @@ import com.example.mapsapp.viewmodels.MarckerViewModelFactory
 @Composable
 fun EditMarkerScreen(id: Int, navBack :() -> Unit){
     val context = LocalContext.current
-    val marckViewModel : MarckerViewModel = viewModel()
+    val marckViewModel : EditMarckerViewModel = viewModel(factory = EditMarckerViewModelFactory(id))
     val titile = marckViewModel.titleMarcker.observeAsState("")
     val description = marckViewModel.descriptionMarcker.observeAsState("")
     val imgUrl = marckViewModel.url.observeAsState("")
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+    val hasChanged = marckViewModel.isChanged.observeAsState(false)
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success && imageUri.value != null) {
@@ -52,17 +55,6 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
                 bitmap.value = BitmapFactory.decodeStream(stream)
             }
         }
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(onClick = {
-            val uri = createImageUri(context)
-            imageUri.value = uri
-            launcher.launch(uri!!)
-        }) {
-            Text("Abrir Cámara")
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-    }
     Column (
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -72,7 +64,7 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
         Column(Modifier.padding(35.dp)) {
             TextField(
                 value = titile.value,
-                onValueChange = { marckViewModel.editTitle(it) },
+                onValueChange = { marckViewModel.editTitle(it) ; marckViewModel.cambioRealizado(true) },
                 label = { Text("Titulo") },
                 modifier = Modifier.fillMaxWidth()
                     .height(50.dp)
@@ -80,7 +72,7 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
             Spacer(modifier = Modifier.height(16.dp))
             TextField(
                 value = description.value,
-                onValueChange = { marckViewModel.editDesciption(it) },
+                onValueChange = { marckViewModel.editDesciption(it) ; marckViewModel.cambioRealizado(true) },
                 label = { Text("Descripcion") },
                 modifier = Modifier.fillMaxWidth()
                     .height(120.dp)
@@ -90,6 +82,7 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
                 val uri = createImageUri(context)
                 imageUri.value = uri
                 launcher.launch(uri!!)
+                marckViewModel.cambioRealizado(true)
             }) {
                 Text("Abrir Cámara")
             }
@@ -99,13 +92,12 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
                     modifier = Modifier.size(300.dp).clip(RoundedCornerShape(12.dp)),contentScale = ContentScale.Crop)
             }
         }
-
-        Button(onClick = {
-
-            marckViewModel.saveMarcker(bitmap.value)
-            navBack()
-        }) {
-            Text("Add")
+        if (hasChanged.value == true){
+            Button(onClick = {
+                marckViewModel.updateMarcker(bitmap.value)
+            }) {
+                Text("Update")
+            }
         }
 
         Button(onClick = {

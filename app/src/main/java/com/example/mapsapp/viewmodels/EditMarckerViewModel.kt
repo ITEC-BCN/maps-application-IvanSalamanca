@@ -12,14 +12,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 
+class EditMarckerViewModel( id : Int) : ViewModel() {
 
-// Hacer boton edidted para guardar si hay cambios
-class MarckerViewModel (latitude: Double,longitude : Double) : ViewModel(){
     val repository = Repository()
 
-    val cordenadas = latitude.toString()+";"+longitude
-
-
+    // Marcador que se ha seleccionado para editar
+    private val _marcker = MutableLiveData<Marcker>()
+    val marcker = _marcker
 
     // Valores Marcador
     private val _titleMarker = MutableLiveData<String>()
@@ -31,25 +30,39 @@ class MarckerViewModel (latitude: Double,longitude : Double) : ViewModel(){
     private val _url = MutableLiveData<String>()
     val url = _url
 
-     fun insertNewMarcker(cordenadas : String, title: String, desc: String, url : String) {
+    // Muestra su hay algun cambio
+    private val _isChanged = MutableLiveData<Boolean>(false)
+    val isChanged = _isChanged
+
+    //
+    fun getMarcker (id: Int){
         CoroutineScope(Dispatchers.IO).launch {
-            repository.insertMarcker(Marcker(id = null,cordenadas,title,desc,url))
+            repository.getMarcker(id)
         }
     }
 
+    // cambiar valores
+    fun cambioRealizado( cambio : Boolean){
+        _isChanged.value = cambio
+    }
 
-    // Insterar nuvo marcador
     @RequiresApi(Build.VERSION_CODES.O)
-    fun saveMarcker(img : Bitmap?){
-        val stream = ByteArrayOutputStream()
-        img?.compress(Bitmap.CompressFormat.PNG, 0, stream)
+    fun updateMarcker(img : Bitmap?){
         CoroutineScope(Dispatchers.IO).launch {
+            // Eliminamos marcador antiguo
+            repository.deleteMarcker(_marcker.value!!.id!!)
+
+            // Creamos marcador nuevo
+            val stream = ByteArrayOutputStream()
+            img?.compress(Bitmap.CompressFormat.PNG, 0, stream)
             val imgURL = repository.uploadImage(stream.toByteArray())
-            var marcker = Marcker(id = 0,cordenadas,_titleMarker.value!!,descriptionMarcker.value!!,imgURL)
+            var marcker = Marcker(id = 0,_marcker.value!!.cordenadas,_titleMarker.value!!,descriptionMarcker.value!!,imgURL)
             repository.insertMarcker(marcker)
         }
     }
 
+
+    // Funciones para Modificar el nuevo marcador
     fun editTitle(newTitle: String){
         _titleMarker.value = newTitle
     }
@@ -61,14 +74,4 @@ class MarckerViewModel (latitude: Double,longitude : Double) : ViewModel(){
     fun editImage(newImage : String){
         _url.value = newImage
     }
-
-
-
-
-
-
-
-
 }
-
-

@@ -20,6 +20,7 @@ class MySupabaseClient() {
             supabaseKey = supabaseKey
         ) {
             install(Postgrest)
+            install(Storage)
         }
         storage = client.storage
     }

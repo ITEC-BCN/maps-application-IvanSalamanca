@@ -41,23 +41,22 @@ fun MarkerListScreen(navigateToEdit : (Int) -> Unit){
 
     Column(
         modifier = Modifier.fillMaxSize().padding(top = 110.dp),
-        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally,){
+        horizontalAlignment = Alignment.CenterHorizontally,){
         LazyColumn() {
 
             items(lista.value) { item ->
                 Log.d("Ivan","Elemento de la lista ${item.title}")
-                MarckerItemList(item, /*navigateDetail*/)
+                MarckerItemList(item,navigateToEdit)
             }
         }
     }
 }
 
 @Composable
-fun MarckerItemList(marcker: Marcker){
+fun MarckerItemList(marcker: Marcker,navigateToEdit : (Int) -> Unit){
     Card(
-        //border = BorderStroke(2.dp, Color.LightGray), shape = RoundedCornerShape(8.dp),
         modifier = Modifier.padding(8.dp),
-        onClick = {},
+        onClick = {navigateToEdit(marcker.id!!)},
 
         ) {
         Box(){
