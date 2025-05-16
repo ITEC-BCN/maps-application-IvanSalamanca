@@ -1,5 +1,6 @@
 package com.example.mapsapp.ui.screens.sesion
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,7 +43,7 @@ fun LogInScreen(navRegister: ()-> Unit, navToDrower:() -> Unit){
     }
     else{
         if (showError.value!!) {
-            val errorMessage = (authState as AuthState.Error).message
+            val errorMessage = (authState.value as AuthState.Error).message
             if (errorMessage.contains("invalid_credentials")) {
                 Toast.makeText(context, "Invalid credentials", Toast.LENGTH_LONG).show()
             } else {
@@ -79,7 +80,7 @@ fun LogInScreen(navRegister: ()-> Unit, navToDrower:() -> Unit){
 
             Spacer(Modifier.height(16.dp))
             Button(
-                onClick = { authViewModel.signIn() },
+                onClick = { Log.d("LogeTheme","BotonPulsado");authViewModel.signUp() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Entrar")

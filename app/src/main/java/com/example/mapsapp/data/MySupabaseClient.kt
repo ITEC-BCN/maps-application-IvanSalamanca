@@ -2,6 +2,7 @@ package com.example.mapsapp.data
 
 import android.R.attr.password
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.mapsapp.utils.AuthState
 import io.github.jan.supabase.SupabaseClient
@@ -87,12 +88,14 @@ class MySupabaseClient() {
     // Funcion para registratse
     suspend fun signUpWithEmail(emailValue: String, passwordValue: String): AuthState {
         try {
+            Log.d("LogeTheme","Solicitando registro en MySupaBaseClient")
             client.auth.signUpWith(Email){
                 email = emailValue
                 password = passwordValue
             }
             return AuthState.Authenticated
         } catch (e: Exception) {
+            Log.d("LogeTheme","Algo fallo en MySupabaseClient")
             return AuthState.Error(e.localizedMessage)
         }
     }
@@ -100,6 +103,7 @@ class MySupabaseClient() {
     // Funcion para iniciar sesion
     suspend fun signInWithEmail(emailValue: String, passwordValue: String): AuthState {
         try {
+            Log.d("LogeTheme","Solicitando desde MySupaBaseClient")
             client.auth.signInWith(Email) {
                 email = emailValue
                 password = passwordValue

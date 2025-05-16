@@ -1,5 +1,6 @@
 package com.example.mapsapp.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -54,7 +55,7 @@ class AuthViewModel(private val sharedPreferences: SharedPreferencesHelper) : Vi
 
     fun signUp() {
         viewModelScope.launch {
-            authManager
+            Log.d("LogeTheme","Solicitando en viewModel register")
             _authState.value = authManager.signUpWithEmail(_email.value!!, _password.value!!)
             if (_authState.value is AuthState.Error) {
                 _showError.value = true
@@ -70,8 +71,10 @@ class AuthViewModel(private val sharedPreferences: SharedPreferencesHelper) : Vi
 
     fun signIn() {
         viewModelScope.launch {
+            Log.d("LogeTheme","En Funcion ViewModel")
             _authState.value = authManager.signInWithEmail(_email.value!!, _password.value!!)
             if (_authState.value is AuthState.Error) {
+                Log.d("LogeTheme","ViewModel Recive un fallo")
                 _showError.value = true
             } else {
                 val session = authManager.retrieveCurrentSession()
