@@ -20,6 +20,12 @@ sealed class Destination{
 
     @Serializable
     data class PantallaEditMarcador ( val id : Int) : Destination()
+
+    @Serializable
+    object PantallaLogIn: Destination()
+
+    @Serializable
+    object PantallaRegister: Destination()
 }
 
 

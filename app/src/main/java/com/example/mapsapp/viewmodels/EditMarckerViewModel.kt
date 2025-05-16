@@ -9,6 +9,7 @@ import com.example.mapsapp.data.Marcker
 import com.example.mapsapp.data.Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 
@@ -34,10 +35,18 @@ class EditMarckerViewModel( id : Int) : ViewModel() {
     private val _isChanged = MutableLiveData<Boolean>(false)
     val isChanged = _isChanged
 
+
+    init {
+        getMarcker(id)
+    }
     //
     fun getMarcker (id: Int){
+        var marcador : Marcker
         CoroutineScope(Dispatchers.IO).launch {
-            repository.getMarcker(id)
+             marcador = repository.getMarcker(id)
+            CoroutineScope(Dispatchers.Main).launch {
+                _marcker.value = marcador
+            }
         }
     }
 
@@ -49,15 +58,17 @@ class EditMarckerViewModel( id : Int) : ViewModel() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun updateMarcker(img : Bitmap?){
         CoroutineScope(Dispatchers.IO).launch {
-            // Eliminamos marcador antiguo
-            repository.deleteMarcker(_marcker.value!!.id!!)
+            // Eliminamos foto antigua
+            repository.deleteImage(_marcker.value!!.url!!)
 
-            // Creamos marcador nuevo
+
+            // Actualicamos marcador nuevo
             val stream = ByteArrayOutputStream()
             img?.compress(Bitmap.CompressFormat.PNG, 0, stream)
             val imgURL = repository.uploadImage(stream.toByteArray())
             var marcker = Marcker(id = 0,_marcker.value!!.cordenadas,_titleMarker.value!!,descriptionMarcker.value!!,imgURL)
-            repository.insertMarcker(marcker)
+            repository.updateMarcker(_marcker.value!!.id!!,marcker)
+
         }
     }
 

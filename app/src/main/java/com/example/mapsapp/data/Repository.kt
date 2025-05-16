@@ -20,6 +20,7 @@ class Repository {
     suspend fun getMarcker(id : Int) = database.getMarcker(id)
     suspend fun getAllMarckers() = database.getAllMarckers()
     suspend fun deleteMarcker (id: Int)= database.deleteMarcker(id)
+    suspend fun deleteImage(imageName : String) = database.deleteImage(imageName)
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun uploadImage (img : ByteArray) = database.uploadImage(img)
     suspend fun updateMarcker(id: Int, editedMarker: Marcker){
