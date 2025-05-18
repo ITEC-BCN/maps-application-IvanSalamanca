@@ -13,6 +13,9 @@ import io.github.jan.supabase.auth.user.UserSession
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.launch
 
+/**
+ * Gestiona todo lo relacionado con la utentificacion
+ */
 class AuthViewModel(private val sharedPreferences: SharedPreferencesHelper) : ViewModel(){
     private val authManager = MyApp.database
     private val _email = MutableLiveData<String>()

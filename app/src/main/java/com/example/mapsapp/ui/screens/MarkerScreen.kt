@@ -41,13 +41,17 @@ import java.io.File
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MarckerScreen (latitud: Double, longitud: Double, navigateBack: () -> Unit){
+
+    // Mismo funcionamiento que con editar
+
     val context = LocalContext.current
     val marckViewModel : MarckerViewModel = viewModel(factory = MarckerViewModelFactory(latitud,longitud))
     val titile = marckViewModel.titleMarcker.observeAsState("")
     val description = marckViewModel.descriptionMarcker.observeAsState("")
-    val imgUrl = marckViewModel.url.observeAsState("")
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+    // Para las fotos
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success && imageUri.value != null) {
@@ -63,7 +67,7 @@ fun MarckerScreen (latitud: Double, longitud: Double, navigateBack: () -> Unit){
                 bitmap.value = BitmapFactory.decodeStream(stream)
             }
         }
-    Column (
+    Column (    // Empieza vista
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -115,6 +119,8 @@ fun MarckerScreen (latitud: Double, longitud: Double, navigateBack: () -> Unit){
         }
     }
 }
+
+// Crear una imagen
 fun createImageUri(context: Context): Uri? {
     val file = File.createTempFile("temp_image_", ".jpg", context.cacheDir).apply {
         createNewFile()

@@ -21,7 +21,7 @@ import com.example.mapsapp.ui.screens.PermisosScreen
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Composable
+@Composable  // Navegacion interna de la app una vez hay permisos y hay sesion
 fun InternalNavigationWrapper(navController: NavHostController, padding: Modifier){
     NavHost(navController, PantallaMap){
         composable<PantallaMap> {

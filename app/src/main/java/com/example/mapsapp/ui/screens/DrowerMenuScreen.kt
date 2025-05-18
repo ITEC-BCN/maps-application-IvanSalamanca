@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DrowerMenuScreen (logeddOut: () -> Unit){
+fun DrowerMenuScreen (logeddOut: () -> Unit){ // elemento para navegar entre lista y mapa
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -62,7 +62,7 @@ fun DrowerMenuScreen (logeddOut: () -> Unit){
                         }
                     )
                 }
-                Column(
+                Column( // Botton de log out
                     Modifier.fillMaxSize().padding(bottom = 24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
@@ -78,7 +78,7 @@ fun DrowerMenuScreen (logeddOut: () -> Unit){
         },
         drawerState = drawerState
     ){
-        Scaffold(
+        Scaffold( // Scafold que se ve mientras esta cerrado el menu
             topBar = {
                 TopAppBar(
                     title = { Text("ITB Maps") },
@@ -89,7 +89,7 @@ fun DrowerMenuScreen (logeddOut: () -> Unit){
                     }
                 )
             }
-        ) { innerPadding ->
+        ) { innerPadding -> // No se usa lo se 😅
             InternalNavigationWrapper(navController, Modifier.padding(innerPadding))
         }
 

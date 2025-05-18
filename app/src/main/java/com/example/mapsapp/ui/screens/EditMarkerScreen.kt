@@ -50,6 +50,8 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
     val hasChanged = marckViewModel.isChanged.observeAsState(false)
+
+    // remembers para lanzar la camara y la galeria
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success && imageUri.value != null) {
@@ -65,7 +67,7 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
                 bitmap.value = BitmapFactory.decodeStream(stream)
             }
         }
-    marckViewModel.getMarcker(id)
+    marckViewModel.getMarcker(id) // Obtenemos el marcador a editar
     Column (
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -73,13 +75,13 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
     ){
 
         Column(Modifier.padding(35.dp)) {
-            Log.d("IMAGEN", "${marker.value?.url}")
-            Image(
+            Image( // Imagen de Marcador
                 painter = rememberAsyncImagePainter("https://"+marker.value?.url ?: ""),
                 contentDescription = "Imagen Marcador ${marker.value?.title ?: ""}",
                 modifier = Modifier.height(215.dp).width(215.dp)
             )
-            TextField(
+            TextField(  // Titulo
+                // le pongo el valor de el marcador como titulo a el textfield para poder modificarlo directo
                 value = titile.value,
                 onValueChange = { marckViewModel.editTitle(it) ; marckViewModel.cambioRealizado(true) },
                 label = { Text(marker.value?.title ?: "") },
@@ -87,7 +89,7 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
                     .height(50.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            TextField(
+            TextField(  // Descripcion
                 value = description.value,
                 onValueChange = { marckViewModel.editDesciption(it) ; marckViewModel.cambioRealizado(true) },
                 label = { Text(marker.value?.descripcion ?: "") },
@@ -95,7 +97,7 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
                     .height(120.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Row {
+            Row { // Botones para las imagenes Camera o galeria
                 Button(onClick = {
                     val uri = createImageUri(context)
                     imageUri.value = uri
@@ -110,7 +112,7 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
                     Text("Foto Galeria")
                 }
             }
-            Row {
+            Row { // Boton para mostrar la opcion de actualizar o back
                 if (hasChanged.value == true){
                     Button(onClick = {
                         marckViewModel.updateMarcker(bitmap.value)
@@ -126,7 +128,7 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
                 }) {
                     Text("<--Back--")
                 }
-            }
+            } // Aqui se mostrara la imagen nueva
             Spacer(modifier = Modifier.height(24.dp))
             bitmap.value?.let {
                 Image(bitmap = it.asImageBitmap(), contentDescription = null,

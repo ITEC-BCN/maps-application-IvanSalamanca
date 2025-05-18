@@ -14,7 +14,7 @@ import com.example.mapsapp.ui.screens.PermisosScreen
 import com.example.mapsapp.ui.screens.sesion.LogInScreen
 import com.example.mapsapp.ui.screens.sesion.RegisterScreen
 
-@Composable
+@Composable  // Navegacion externa que no dejara acceder mientras no hayas acceptado permisos y logeado
 fun MainNavigationWrapper(navController: NavHostController){
     NavHost(navController, PantallaPermisos){
         composable<PantallaPermisos> {

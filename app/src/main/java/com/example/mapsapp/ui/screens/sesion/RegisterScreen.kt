@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,7 +31,7 @@ import com.example.mapsapp.viewmodels.AuthViewModel
 import com.example.mapsapp.viewmodels.AuthViewModelFactory
 
 @Composable
-fun RegisterScreen(navToDrower:() -> Unit){
+fun RegisterScreen(navToDrower:() -> Unit){ // Pantalla para realizar el registro
     val context = LocalContext.current
     val authViewModel : AuthViewModel = viewModel(factory = AuthViewModelFactory(SharedPreferencesHelper(context)))
     val email = authViewModel.email.observeAsState("")
@@ -53,7 +54,7 @@ fun RegisterScreen(navToDrower:() -> Unit){
             }
             authViewModel.errorMessageShowed()
         }
-        Column(
+        Column(     // Empieza la vista
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp),
@@ -75,13 +76,13 @@ fun RegisterScreen(navToDrower:() -> Unit){
                 value = password.value,
                 onValueChange = { authViewModel.editPassword(it) },
                 label = { Text("Password") },
+                visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
                     .height(120.dp)
             )
 
-
             Spacer(Modifier.height(16.dp))
-            Button(
+            Button(     // Boton para registrarse
                 onClick = {
                     navToDrower()
                     Log.d("LogeTheme","BotonPulsado");authViewModel.signUp()
@@ -93,19 +94,6 @@ fun RegisterScreen(navToDrower:() -> Unit){
             ) {
                 Text("Registrate")
             }
-
-            if (showError.value!!) {
-                Text(
-                    "Error al registrarse",
-                    color = Color.Red,
-                    modifier = Modifier.padding(top = 16.dp)
-                )
-            }
         }
-
-
-
     }
-
-
 }

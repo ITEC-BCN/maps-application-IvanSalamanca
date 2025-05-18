@@ -28,6 +28,9 @@ import com.example.mapsapp.viewmodels.PermissionViewModel
 
 @Composable
 fun PermisosScreen(navigateNext: () -> Unit) {
+
+    // Gestiona los permisos
+
     val activity = LocalContext.current as Activity
     val viewModel = viewModel<PermissionViewModel>()
     val permissionStatus = viewModel.permissionStatus.value

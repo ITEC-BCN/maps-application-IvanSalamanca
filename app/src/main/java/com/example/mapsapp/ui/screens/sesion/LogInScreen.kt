@@ -48,7 +48,7 @@ fun LogInScreen(navRegister: ()-> Unit, navToDrower:() -> Unit){
         navToDrower()
     }
     else{
-        if (showError.value!!) {
+        if (showError.value!!) { // Descartamos posibles errores
             val errorMessage = (authState.value as AuthState.Error).message
             if (errorMessage.contains("invalid_credentials")) {
                 Toast.makeText(context, "Invalid credentials", Toast.LENGTH_LONG).show()
@@ -58,7 +58,7 @@ fun LogInScreen(navRegister: ()-> Unit, navToDrower:() -> Unit){
             }
             authViewModel.errorMessageShowed()
         }
-        Column(
+        Column( // Aqui empieza la vista de la pantalla
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp),
@@ -67,7 +67,6 @@ fun LogInScreen(navRegister: ()-> Unit, navToDrower:() -> Unit){
             Text("Iniciar sesión", style = MaterialTheme.typography.headlineMedium)
 
             Spacer(Modifier.height(16.dp))
-
             TextField(      // Email
                 value = email.value,
                 onValueChange = { authViewModel.editEmail(it) },
@@ -80,10 +79,10 @@ fun LogInScreen(navRegister: ()-> Unit, navToDrower:() -> Unit){
                 value = password.value,
                 onValueChange = { authViewModel.editPassword(it) },
                 label = { Text("Password") },
+                visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
                     .height(120.dp)
             )
-
 
             Spacer(Modifier.height(16.dp))
             Button(
@@ -99,13 +98,7 @@ fun LogInScreen(navRegister: ()-> Unit, navToDrower:() -> Unit){
                 Text("Entrar")
             }
 
-            if (showError.value!!) {
-                Text(
-                    "Error al iniciar sesión",
-                    color = Color.Red,
-                    modifier = Modifier.padding(top = 16.dp)
-                )
-            }
+            // Redireccion a Register
             Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Spacer(Modifier.height(15.dp))
                 Row (verticalAlignment = Alignment.CenterVertically,){
@@ -113,13 +106,7 @@ fun LogInScreen(navRegister: ()-> Unit, navToDrower:() -> Unit){
                     Spacer(Modifier.width(5.dp))
                     Button(onClick = {navRegister()}) { Text("Registrate", fontSize = 14.sp) }
                 }
-
             }
         }
-
-
-
     }
-
-
 }

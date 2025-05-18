@@ -10,6 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * Obtiene los marcadores para la lista y permite eliminarlos
+ */
 class ListMarckViewModel : ViewModel() {
 
     val repository = Repository()

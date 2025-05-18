@@ -13,6 +13,9 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 
+/**
+ * Gestiona la edicion de los marcadores y obtiene el marcador con ¿id? para mostrar
+ */
 class EditMarckerViewModel( id : Int) : ViewModel() {
 
     val repository = Repository()
@@ -80,9 +83,5 @@ class EditMarckerViewModel( id : Int) : ViewModel() {
 
     fun editDesciption(newDescriptor: String){
         _descriptionMarker.value = newDescriptor
-    }
-
-    fun editImage(newImage : String){
-        _url.value = newImage
     }
 }

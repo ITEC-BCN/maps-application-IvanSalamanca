@@ -18,7 +18,8 @@ import io.github.jan.supabase.storage.storage
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class MySupabaseClient() {
+class MySupabaseClient() { // Desde esta clase se gestiona todo lo relacionado con Supabase
+    // Si te lees esto pon el los comentarios de la practica --> (  :P  )
     lateinit var client: SupabaseClient
     lateinit var storage: Storage
     constructor(supabaseUrl: String, supabaseKey: String): this(){
@@ -72,7 +73,7 @@ class MySupabaseClient() {
         client.storage.from("images").delete(imgName)
     }
 
-
+    // Necesario para el update
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun uploadImage(imageFile: ByteArray): String {
         val fechaHoraActual = LocalDateTime.now()
@@ -84,6 +85,7 @@ class MySupabaseClient() {
     fun buildImageUrl(imageFileName: String) = "${client.supabaseUrl}/storage/v1/object/public/images/${imageFileName}"
 
     // Log in
+
 
     // Funcion para registratse
     suspend fun signUpWithEmail(emailValue: String, passwordValue: String): AuthState {
@@ -100,7 +102,7 @@ class MySupabaseClient() {
         }
     }
 
-    // Funcion para iniciar sesion
+    // Funcion para Log in
     suspend fun signInWithEmail(emailValue: String, passwordValue: String): AuthState {
         try {
             Log.d("LogeTheme","Solicitando desde MySupaBaseClient")

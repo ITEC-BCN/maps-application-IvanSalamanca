@@ -61,7 +61,7 @@ fun MarkerListScreen(navigateToEdit : (Int) -> Unit){
                         }
                     }
                 )
-                SwipeToDismissBox(state = dissmissState, backgroundContent = {
+                SwipeToDismissBox(state = dissmissState, backgroundContent = { // Para poder eliminarlo
                     Box(
                         Modifier
                             .fillMaxSize()
@@ -76,16 +76,12 @@ fun MarkerListScreen(navigateToEdit : (Int) -> Unit){
                         )
                     }
                 }){
-                    Log.d("Ivan","Elemento de la lista ${item.title}")
                     MarckerItemList(item,navigateToEdit)
                 }
-
             }
-
         }
     }
 }
-
 @Composable
 fun MarckerItemList(marcker: Marcker,navigateToEdit : (Int) -> Unit){
     Card(

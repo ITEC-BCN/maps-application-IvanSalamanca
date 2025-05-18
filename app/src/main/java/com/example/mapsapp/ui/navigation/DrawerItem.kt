@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.ui.graphics.vector.ImageVector
 
+// Elementos de la navegacion
 enum class DrawerItem(
     val icon: ImageVector,
     val text: String,

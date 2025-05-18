@@ -8,10 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
-// necesario ?
-
-// TODO Es necesario?
+// Hace de Intermediario entre la BBDD y viewModel
 class Repository {
 
     val database = MyApp.database

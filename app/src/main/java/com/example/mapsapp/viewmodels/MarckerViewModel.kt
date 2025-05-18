@@ -12,8 +12,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 
-
-// Hacer boton edidted para guardar si hay cambios
+/**
+ * Creacion de marcadores
+ */
 class MarckerViewModel (latitude: Double,longitude : Double) : ViewModel(){
     val repository = Repository()
 
