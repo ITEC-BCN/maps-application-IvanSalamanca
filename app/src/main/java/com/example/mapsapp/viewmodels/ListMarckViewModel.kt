@@ -32,4 +32,11 @@ class ListMarckViewModel : ViewModel() {
         }
         Log.d("Ivan","Salgo de get all marckers")
     }
+
+    // Eliminar marcador
+    fun deleteMarker(id : Int){
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.deleteMarcker(id)
+        }
+    }
 }

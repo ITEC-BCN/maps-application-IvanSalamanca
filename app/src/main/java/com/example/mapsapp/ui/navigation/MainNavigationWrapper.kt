@@ -33,7 +33,8 @@ fun MainNavigationWrapper(navController: NavHostController){
         }
 
         composable<PantallaDrower> {
-            DrowerMenuScreen()
+            DrowerMenuScreen{navController.navigate(PantallaLogIn)}
         }
+
     }
 }

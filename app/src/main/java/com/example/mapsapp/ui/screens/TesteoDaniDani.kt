@@ -1,5 +1,6 @@
 package com.example.mapsapp.ui.screens
 
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,25 +27,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.mapsapp.ui.navigation.DrawerItem
 import com.example.mapsapp.ui.navigation.InternalNavigationWrapper
-import com.example.mapsapp.utils.SharedPreferencesHelper
-import com.example.mapsapp.viewmodels.AuthViewModel
-import com.example.mapsapp.viewmodels.AuthViewModelFactory
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DrowerMenuScreen (logeddOut: () -> Unit){
+fun DrawerScreen(logout: () -> Unit) {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    var context = LocalContext.current
-    val authViewModel : AuthViewModel = viewModel(factory = AuthViewModelFactory(SharedPreferencesHelper(context)))
     var selectedItemIndex by remember { mutableStateOf(0) }
     ModalNavigationDrawer(
         gesturesEnabled = false,
@@ -52,7 +46,12 @@ fun DrowerMenuScreen (logeddOut: () -> Unit){
             ModalDrawerSheet {
                 DrawerItem.entries.forEachIndexed { index, drawerItem ->
                     NavigationDrawerItem(
-                        icon = {Icon(imageVector = drawerItem.icon, contentDescription = drawerItem.text)},
+                        icon = {
+                            Icon(
+                                imageVector = drawerItem.icon,
+                                contentDescription = drawerItem.text
+                            )
+                        },
                         label = { Text(text = drawerItem.text) },
                         selected = index == selectedItemIndex,
                         onClick = {
@@ -67,7 +66,7 @@ fun DrowerMenuScreen (logeddOut: () -> Unit){
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    IconButton(onClick = { authViewModel.logout() ;logeddOut()}) {
+                    IconButton(onClick = { logout() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ExitToApp,
                             contentDescription = "Logout"
@@ -77,11 +76,11 @@ fun DrowerMenuScreen (logeddOut: () -> Unit){
             }
         },
         drawerState = drawerState
-    ){
+    ) {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("ITB Maps") },
+                    title = { Text("Awesome App") },
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
                             Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")

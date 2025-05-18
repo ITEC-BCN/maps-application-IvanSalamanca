@@ -17,9 +17,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -45,9 +51,37 @@ fun MarkerListScreen(navigateToEdit : (Int) -> Unit){
         LazyColumn() {
 
             items(lista.value) { item ->
-                Log.d("Ivan","Elemento de la lista ${item.title}")
-                MarckerItemList(item,navigateToEdit)
+                val dissmissState = rememberSwipeToDismissBoxState(
+                    confirmValueChange = {
+                        if (it == SwipeToDismissBoxValue.EndToStart) {
+                            viewModel.deleteMarker(item.id!!)
+                            true
+                        } else {
+                            false
+                        }
+                    }
+                )
+                SwipeToDismissBox(state = dissmissState, backgroundContent = {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 20.dp),
+                        contentAlignment = Alignment.CenterEnd,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete",
+                            tint = Color.Red,
+                            modifier= Modifier.padding(bottom = 15.dp)
+                        )
+                    }
+                }){
+                    Log.d("Ivan","Elemento de la lista ${item.title}")
+                    MarckerItemList(item,navigateToEdit)
+                }
+
             }
+
         }
     }
 }

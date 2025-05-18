@@ -88,8 +88,6 @@ class AuthViewModel(private val sharedPreferences: SharedPreferencesHelper) : Vi
     }
 
 
-
-
     private fun refreshToken() {
         viewModelScope.launch {
             try {

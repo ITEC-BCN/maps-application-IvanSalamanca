@@ -57,6 +57,14 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
                 bitmap.value = BitmapFactory.decodeStream(stream)
             }
         }
+    val pickImageLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                imageUri.value = it
+                val stream = context.contentResolver.openInputStream(it)
+                bitmap.value = BitmapFactory.decodeStream(stream)
+            }
+        }
     marckViewModel.getMarcker(id)
     Column (
         modifier = Modifier.fillMaxSize(),
@@ -96,6 +104,13 @@ fun EditMarkerScreen(id: Int, navBack :() -> Unit){
                 }) {
                     Text("Abrir Cámara")
                 }
+                Button(onClick = {
+                    pickImageLauncher.launch("image/*")
+                }) {
+                    Text("Foto Galeria")
+                }
+            }
+            Row {
                 if (hasChanged.value == true){
                     Button(onClick = {
                         marckViewModel.updateMarcker(bitmap.value)
