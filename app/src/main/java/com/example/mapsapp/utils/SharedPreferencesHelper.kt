@@ -8,8 +8,9 @@ class SharedPreferencesHelper(context: Context) {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)
     fun saveAuthData(accessToken: String, refreshToken: String) {
-        sharedPreferences.edit{
-            putString("access_token", accessToken).putString("refresh_token", refreshToken)
+        sharedPreferences.edit {
+            putString("access_token", accessToken)
+                .putString("refresh_token", refreshToken)
         }
     }
     fun getAccessToken(): String? = sharedPreferences.getString("access_token", null)
@@ -18,3 +19,4 @@ class SharedPreferencesHelper(context: Context) {
         sharedPreferences.edit { clear() }
     }
 }
+

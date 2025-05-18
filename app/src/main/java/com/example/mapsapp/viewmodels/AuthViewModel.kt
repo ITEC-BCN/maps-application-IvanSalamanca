@@ -9,6 +9,7 @@ import com.example.mapsapp.data.MySupabaseClient
 import com.example.mapsapp.utils.AuthState
 import com.example.mapsapp.utils.SharedPreferencesHelper
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.user.UserSession
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.launch
 
@@ -85,6 +86,9 @@ class AuthViewModel(private val sharedPreferences: SharedPreferencesHelper) : Vi
             }
         }
     }
+
+
+
 
     private fun refreshToken() {
         viewModelScope.launch {
